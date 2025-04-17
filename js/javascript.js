@@ -43,6 +43,10 @@ const fovoritedItems = (data) => {
 
 
 
+
+
+
+
 //fetch the categories data
 
 
@@ -119,7 +123,7 @@ const displayAllPets = (allPets) => {
 
     // console.log(allPets);
     for (const singlePet of allPets) {
-        // console.log(singlePet.petId);
+        // console.log(singlePet);
         const gridContainer = document.getElementById('grid-container')
         const singleGrid = document.createElement('div')
         singleGrid.classList.add('my-5')
@@ -154,7 +158,7 @@ const displayAllPets = (allPets) => {
       <i class="fa-solid fa-heart"></i>
     </button>
     <button onclick="adopted(this)" class="bg-teal-600 text-white px-3 py-1 rounded hover:bg-teal-700 text-sm cursor-pointer">Adopt</button>
-    <button class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 text-sm cursor-pointer">Details</button>
+    <button onclick="loadDetails(${singlePet.petId})" class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 text-sm cursor-pointer">Details</button>
   </div>
         
         `
@@ -162,7 +166,41 @@ const displayAllPets = (allPets) => {
     }
 }
 
+const loadDetails = (petId) => {
+    fetch(`https://openapi.programming-hero.com/api/peddy/pet/${petId}`)
+        .then(res => res.json())
+        .then(data => displayModalDetails(data.petData))
 
+}
+
+const displayModalDetails = (details) => {
+
+    console.log(details)
+
+    const modalContainer = document.getElementById('modal-content')
+    modalContainer.innerHTML = `
+
+   <img class="mx-auto" src="${details.image}" alt="">
+      <!-- Info Section -->
+  <div class="text-gray-600 text-sm space-y-1 my-3">
+    <div class="flex justify-center text-2xl items-center gap-2">
+      <span>📋</span> <span class="font-bold" >Breed: ${details.breed || "Not Found"}</span>
+    </div>
+    <div class="flex justify-center text-2xl items-center gap-2">
+      <span>📅</span> <span>Birth: ${details.date_of_birth || "Not Found"}</span>
+    </div>
+    <div class="flex justify-center text-2xl items-center gap-2">
+      <span>♀️</span> <span>Gender: ${details.gender}</span>
+    </div>
+    <div class="flex justify-center text-2xl items-center gap-2">
+      <span>💲</span> <span>Price: ${details.price || "Not Found"} $</span>
+    </div>
+  </div>
+        
+    `
+
+    document.getElementById('showModal').click();
+}
 
 
 
