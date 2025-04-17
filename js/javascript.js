@@ -60,6 +60,16 @@ const laodSpecificPets = (categoryName) => {
             if (activeButton) {
                 activeButton.classList.add('active');
             }
+            
+            //if there is no data, there will be shown message that NO INFORMATION
+            const emptyMessage = document.getElementById('empty-message');
+
+            if (data.data.length === 0) {
+                emptyMessage.classList.remove('hidden');
+            } else {
+                emptyMessage.classList.add('hidden');
+            }
+
 
             // Display pets even if the array is empty
             displayAllPets(data.data);
