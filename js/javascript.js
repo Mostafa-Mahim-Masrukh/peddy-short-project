@@ -7,19 +7,41 @@ const removeActiveButton = () => {
 }
 
 
-const adopted = (btn)=>{
-    btn.innerHTML=`Adopted`
-    btn.disabled= true
+const adopted = (btn) => {
+    btn.innerHTML = `Adopted`
+    btn.disabled = true
     btn.classList.add('bg-gray-400', 'cursor-not-allowed'); // optional visual update
     btn.classList.remove('bg-teal-600', 'hover:bg-teal-700', 'cursor-pointer');
 }
 
 
-const redLoved = (btn) => {
-    const icon = btn.querySelector('i');
-    icon.classList.add('text-red-600'); // Tailwind red color
-    btn.disabled = true; // optional: disable if you want one-time like
-  }
+const redLoved = (petId) => {
+    // const icon = btn.querySelector('i');
+    // icon.classList.add('text-red-600'); // Tailwind red color
+    // btn.disabled = true; // optional: disable if you want one-time like
+    // console.log(petId)
+
+    fetch(`https://openapi.programming-hero.com/api/peddy/pet/${petId}`)
+        .then(res => res.json())
+        .then(data => fovoritedItems(data.petData))
+}
+
+
+//show the favorited items to the aside bar
+const favoritedContainer = document.getElementById('favorited-container');
+const fovoritedItems = (data) => {
+    console.log(data)
+    const favoritedItem = document.createElement('div')
+    favoritedItem.innerHTML = `
+    <img src="${data.image}" alt="">
+    `
+    favoritedContainer.append(favoritedItem);
+}
+
+
+
+
+
 
 //fetch the categories data
 
@@ -60,7 +82,7 @@ const laodSpecificPets = (categoryName) => {
             if (activeButton) {
                 activeButton.classList.add('active');
             }
-            
+
             //if there is no data, there will be shown message that NO INFORMATION
             const emptyMessage = document.getElementById('empty-message');
 
@@ -97,7 +119,7 @@ const displayAllPets = (allPets) => {
 
     // console.log(allPets);
     for (const singlePet of allPets) {
-        // console.log(singlePet);
+        // console.log(singlePet.petId);
         const gridContainer = document.getElementById('grid-container')
         const singleGrid = document.createElement('div')
         singleGrid.classList.add('my-5')
@@ -128,7 +150,7 @@ const displayAllPets = (allPets) => {
 
   <!-- Buttons -->
   <div class="flex items-center justify-between pt-2 border-t mt-2">
-    <button onclick="redLoved(this)" class="flex items-center gap-1 text-gray-600 hover:text-teal-600 cursor-pointer">
+    <button onclick="redLoved(${singlePet.petId})" class="flex items-center gap-1 text-gray-600 hover:text-teal-600 cursor-pointer">
       <i class="fa-solid fa-heart"></i>
     </button>
     <button onclick="adopted(this)" class="bg-teal-600 text-white px-3 py-1 rounded hover:bg-teal-700 text-sm cursor-pointer">Adopt</button>
