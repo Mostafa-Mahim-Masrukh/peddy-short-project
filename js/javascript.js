@@ -1,3 +1,11 @@
+//if i click home button, it will refersh and will show again all the pets in the UI
+document.getElementById('refresh').addEventListener('click', function () {
+    removeActiveButton();
+    loadAllpets();
+})
+
+
+
 
 const removeActiveButton = () => {
     const categoryButton = document.getElementsByClassName("category-btn");
@@ -37,14 +45,6 @@ const fovoritedItems = (data) => {
     `
     favoritedContainer.append(favoritedItem);
 }
-
-
-
-
-
-
-
-
 
 
 //fetch the categories data
@@ -201,9 +201,6 @@ const displayModalDetails = (details) => {
 
     document.getElementById('showModal').click();
 }
-
-
-
 
 
 
