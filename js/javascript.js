@@ -7,9 +7,19 @@ const removeActiveButton = () => {
 }
 
 
+const adopted = (btn)=>{
+    btn.innerHTML=`Adopted`
+    btn.disabled= true
+    btn.classList.add('bg-gray-400', 'cursor-not-allowed'); // optional visual update
+    btn.classList.remove('bg-teal-600', 'hover:bg-teal-700', 'cursor-pointer');
+}
 
 
-
+const redLoved = (btn) => {
+    const icon = btn.querySelector('i');
+    icon.classList.add('text-red-600'); // Tailwind red color
+    btn.disabled = true; // optional: disable if you want one-time like
+  }
 
 //fetch the categories data
 
@@ -26,12 +36,12 @@ const loadCategories = () => {
 const displayCategories = (categories) => {
     const categorySection = document.getElementById('category-section')
     for (const category of categories) {
-        console.log(category)
+        // console.log(category)
 
         const buttonContainer = document.createElement('div')
         buttonContainer.classList.add('text-center');
         buttonContainer.innerHTML = `
-        <button id="button-${category.category}" class= "btn gap-6 my-4 w-full" onclick ="laodSpecificPets('${category.category}')" > <img class="w-6" src="${category.category_icon}" alt=""> ${category.category}  </button>
+        <button  id="button-${category.category}" class= "btn gap-6 my-4 w-full category-btn" onclick ="laodSpecificPets('${category.category}')" > <img class="w-6" src="${category.category_icon}" alt=""> ${category.category}  </button>
         `
         categorySection.append(buttonContainer);
     }
@@ -39,12 +49,22 @@ const displayCategories = (categories) => {
 
 
 
-const laodSpecificPets = (data) => {
-
-    fetch(`https://openapi.programming-hero.com/api/peddy/category/${data}`)
+const laodSpecificPets = (categoryName) => {
+    fetch(`https://openapi.programming-hero.com/api/peddy/category/${categoryName}`)
         .then(res => res.json())
-        .then(data => displayAllPets(data.data))
-        .catch(error => console.log(error))
+        .then(data => {
+            removeActiveButton();
+
+            // ✅ Use the original categoryName
+            const activeButton = document.getElementById(`button-${categoryName}`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+
+            // Display pets even if the array is empty
+            displayAllPets(data.data);
+        })
+        .catch(error => console.log(error));
 }
 
 
@@ -60,7 +80,6 @@ const loadAllpets = () => {
 }
 
 const displayAllPets = (allPets) => {
-
 
     const gridContainer = document.getElementById('grid-container')
     gridContainer.innerHTML = ''
@@ -99,10 +118,10 @@ const displayAllPets = (allPets) => {
 
   <!-- Buttons -->
   <div class="flex items-center justify-between pt-2 border-t mt-2">
-    <button class="flex items-center gap-1 text-gray-600 hover:text-teal-600 cursor-pointer">
-      🖤
+    <button onclick="redLoved(this)" class="flex items-center gap-1 text-gray-600 hover:text-teal-600 cursor-pointer">
+      <i class="fa-solid fa-heart"></i>
     </button>
-    <button class="bg-teal-600 text-white px-3 py-1 rounded hover:bg-teal-700 text-sm cursor-pointer">Adopt</button>
+    <button onclick="adopted(this)" class="bg-teal-600 text-white px-3 py-1 rounded hover:bg-teal-700 text-sm cursor-pointer">Adopt</button>
     <button class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 text-sm cursor-pointer">Details</button>
   </div>
         
@@ -110,6 +129,8 @@ const displayAllPets = (allPets) => {
         gridContainer.append(singleGrid)
     }
 }
+
+
 
 
 
