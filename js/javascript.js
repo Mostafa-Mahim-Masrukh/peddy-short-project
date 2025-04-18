@@ -207,5 +207,11 @@ const displayModalDetails = (details) => {
 
 
 
+
+
+
+
+
+
 loadCategories();
 loadAllpets();
